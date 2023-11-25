@@ -50,9 +50,101 @@ void cmd_input(){
         cmd_input_buffer.curr--;
       }
     }
-    else if(ispunct(key) || isletter(key) || isdigit(key) || key == ' '){
+    else if(ispunct(key) || isletter(key) || isdigit(key) || key == ' ' || key == '='){
 
     // create control-key(s) support using keymap[x]
+    if(keymap[42].pressed || keymap[54].pressed) // shift
+    {
+      if(isletter(key))
+      {
+        key-=32; // uppercase
+      }else if(isdigit(key))
+      {
+        const int num = key-48;
+        switch(num) {
+            case 0:
+              key = ')';
+              break;
+            case 1:
+              key = '!';
+              break;
+            case 2:
+              key = '@';
+              break;
+            case 3:
+              key = '#';
+              break;
+            case 4:
+              key = '$';
+              break;
+            case 5:
+              key = '%';
+              break;
+            case 6:
+              key = '^';
+              break;
+            case 7:
+              key = '&';
+              break;
+            case 8:
+              key = '*';
+              break;
+            case 9:
+              key = '(';
+              break;
+          }
+      }
+      else if(ispunct(key) || key == '=')
+      {
+        if(key == '\\')
+          key = '|'; // why is it < ???
+        else if(key == '=')
+          key = '+';
+        else
+        switch(key)
+          {
+            case '[': 
+              key = '{';
+              break; 
+            
+            case ']': 
+              key = '}';
+              break; 
+            
+            case'.': 
+              key = '>';
+              break; 
+            
+            case ',':
+              key = '<';
+              break; 
+            
+            case '/':
+              key = '?';
+              break; 
+            
+            case '`': 
+              key = '~';
+              break; 
+            
+            case '-':  
+              key = '_';
+              break; 
+            
+            case ';':
+              key = ':';
+              break; 
+            
+            case '\'':
+              key = '"';
+              break;
+
+            break;
+          }
+        
+      }
+    }
+
       
       if(cmd_input_buffer.curr < 64 - 1){
         cmd_input_buffer.buffer[cmd_input_buffer.curr] = key;

@@ -127,20 +127,16 @@ bool remove_from_keyboard_input_handles(void* v)
   return false;
 }
 
-bool key_released(const unsigned char scancode)
-{
-  return scancode & 0x80;
-}
-
 void keyboard_handler(struct regs *r)
 {
     /* keyboard's data buffer */
     const unsigned char scancode = inportb(0x60);
     last_scancode = scancode;
-  if (key_released(scancode))
-      keymap[scancode].pressed = false;
-  else
+  
+  if(scancode <= 80 && scancode)
       keymap[scancode].pressed = true;
+  else if ((scancode - 0x80) > 0) // no out of bounds
+      keymap[scancode - 0x80].pressed = false; // released
 
   // run
   for(int i = 0; i < 64; i++)
