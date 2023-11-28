@@ -15,20 +15,21 @@
 void kernelmain(void)
 {
   terminal_init();
-  
+
+  // memory
   gdt_install();
   idt_install();
   isrs_install();
   irq_install();
 
+  // system
   keyboard_install();
   timer_install();
-  
+
   asm volatile("sti");
   
   cmd_install_keyboard();
   
-  cmd_print_dir();
   for(;;)
     {
       

@@ -38,7 +38,7 @@ bool cmd_run_command(){
 }
 
 void cmd_input(){
-  char key = keymap[last_scancode].key;
+  unsigned char key = keymap[last_scancode].key;
   if(cmd_state != idle)
     clear_cmd_input_buffer();
   if(key != '\n'){
@@ -50,12 +50,12 @@ void cmd_input(){
         cmd_input_buffer.curr--;
       }
     }
-    else if(ispunct(key) || isletter(key) || isdigit(key) || key == ' ' || key == '='){
+    else if(ispunct(key) || isletter(key) || isdigit(key) || key == ' ' || key == '=' || key == '@'){
 
     // create control-key(s) support using keymap[x]
     if(keymap[42].pressed || keymap[54].pressed) // shift
     {
-      if(isletter(key))
+      if(key <= 'z' && key >= 'A')
       {
         key-=32; // uppercase
       }else if(isdigit(key))
@@ -68,9 +68,10 @@ void cmd_input(){
             case 1:
               key = '!';
               break;
-            case 2:
-              key = '@';
+            case 2:{
+                key = '@';
               break;
+            }
             case 3:
               key = '#';
               break;
@@ -94,58 +95,34 @@ void cmd_input(){
               break;
           }
       }
-      else if(ispunct(key) || key == '=')
-      {
-        if(key == '\\')
-          key = '|'; // why is it < ???
-        else if(key == '=')
+      
+      if (key == '='){
+        if(!keymap[27].pressed)
           key = '+';
         else
-        switch(key)
-          {
-            case '[': 
-              key = '{';
-              break; 
-            
-            case ']': 
-              key = '}';
-              break; 
-            
-            case'.': 
-              key = '>';
-              break; 
-            
-            case ',':
-              key = '<';
-              break; 
-            
-            case '/':
-              key = '?';
-              break; 
-            
-            case '`': 
-              key = '~';
-              break; 
-            
-            case '-':  
-              key = '_';
-              break; 
-            
-            case ';':
-              key = ':';
-              break; 
-            
-            case '\'':
-              key = '"';
-              break;
-
-            break;
-          }
-        
+          key = '}';
+      }
+      else if (key == '.')
+        key = '>';
+      else if (key == ',')
+        key = '<';
+      else if(key == '<')
+        key = '|';
+      else if (key == '/')
+        key = '?';
+      else if (key == '-')
+        key = '_';
+      else if(key == '@' && !keymap[3].pressed)
+        key = '~';
+      else if (key == '\'')
+        key = '"';
+      else if (key == ';'){
+        if(!keymap[26].pressed)
+          key = ':';
+        else
+          key = '{';
       }
     }
-
-      
       if(cmd_input_buffer.curr < 64 - 1){
         cmd_input_buffer.buffer[cmd_input_buffer.curr] = key;
         cmd_input_buffer.curr++;
@@ -153,7 +130,7 @@ void cmd_input(){
       terminal_update_cursor(terminal.column, terminal.row);
       }
     }
-  }
+      }
   else
     cmd_run_command();
 }
@@ -161,4 +138,5 @@ void cmd_input(){
 void cmd_install_keyboard()
 {
   add_to_keyboard_input_handles(&cmd_input);
+  cmd_print_dir();
 }

@@ -10,7 +10,6 @@ nasm src/kernel/memory/gdt/gdt.asm -f elf32 -o build/bin/gdt.o
 nasm src/kernel/memory/idt/idt.asm -f elf32 -o build/bin/idt.o
 nasm src/kernel/memory/isrs/isrs.asm -f elf32 -o build/bin/isrs.o
 nasm src/kernel/memory/irq/irq.asm -f elf32 -o build/bin/irq.o
-nasm
 echo "Done..." 
 echo ""
 

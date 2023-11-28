@@ -132,7 +132,7 @@ void keyboard_handler(struct regs *r)
     /* keyboard's data buffer */
     const unsigned char scancode = inportb(0x60);
     last_scancode = scancode;
-  
+    
   if(scancode <= 80 && scancode)
       keymap[scancode].pressed = true;
   else if ((scancode - 0x80) > 0) // no out of bounds
