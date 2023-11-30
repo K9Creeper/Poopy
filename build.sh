@@ -1,6 +1,11 @@
 #!bin/bash
 set e
 
+echo "Beginning Clean Up..."
+rm build/bin/*.*
+rm iso/boot/*.bin
+echo ""
+
 echo "Building..." 
 echo ""
 

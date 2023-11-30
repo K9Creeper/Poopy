@@ -29,6 +29,24 @@ return dest;
 
 int strlen(const char *str){ size_t len = 0; while (str[len]) len++;  return len; }
 
+int min(const int i1, const int i2) { if(i1 < i2) return i1; if (i1>i2) return i2; return i1;}
+
+int find(const char* str, const char* f)
+{
+  int ret = -1;
+  for(int i = 0; i < strlen(str)-strlen(f); i++)
+    for(int j = 0; i < strlen(f); j++){
+      if(str[i+j] != f[j]){
+        ret = -1;
+        break;
+      }
+      else{
+        ret = i;
+      }
+    }
+  return ret;
+}
+
 unsigned char inportb (unsigned short _port){
     unsigned char rv;
     asm volatile ("inb %1, %0" : "=a" (rv) : "dN" (_port));
@@ -48,7 +66,10 @@ bool isletter(const char c)
 {
   return (c >= 'A' && c <= 'z');
 }
-
+bool islower(const char c)
+{
+  return (c >= 'a' && c <= 'z');
+}
 bool isdigit(const char c)
 {
   return (c >= '0' && c <= '9');

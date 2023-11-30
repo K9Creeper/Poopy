@@ -1,5 +1,5 @@
 #include "./includes.h"
-#include "./gui/cmd.h"
+#include "./gui/cmd/cmd.h"
 
 // memory managment
 #include "./memory/gdt/gdt.h"
@@ -10,7 +10,7 @@
 // system calls
 #include "./system/input/keyboard.h"
 #include "./system/timer.h"
-
+#include "./system/realclock.h"
 
 void kernelmain(void)
 {
@@ -25,7 +25,8 @@ void kernelmain(void)
   // system
   keyboard_install();
   timer_install();
-
+  realclock_install();
+  
   asm volatile("sti");
   
   cmd_install_keyboard();
