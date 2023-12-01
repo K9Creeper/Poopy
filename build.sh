@@ -34,13 +34,19 @@ grub-mkrescue -o build/bin/os.iso iso
 echo "Done..."
 echo ""
 
+echo "Beginning Clean Up..."
+rm build/bin/*.o
+rm build/bin/*.bin
+rm iso/boot/*.bin
+echo "Done..." 
+echo ""
+
 echo "Booting..."
 qemu-system-i386 -cdrom build/bin/os.iso
 echo "Done..."
 echo ""
 
-echo "Beginning Clean Up..."
+echo "Finishing Clean Up..."
 rm build/bin/*.*
-rm iso/boot/*.bin
 echo "Finished..." 
 echo ""

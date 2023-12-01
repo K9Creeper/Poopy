@@ -25,6 +25,7 @@ void clear_cmd_input_buffer() {
 }
 
 bool cmd_run_command() {
+  cmd_state = printing;
   // next line
   {
     terminal.row++;
@@ -36,10 +37,9 @@ bool cmd_run_command() {
   // get func
   {
     struct cmdcommand* c = get_cmd_command(cmd_input_buffer.buffer);
-    clear_cmd_input_buffer();
     if (c != (struct cmdcommand*)0) fn = c->fn;
   }
-  
+
   // call
   {
     if (fn == (void*)0) {
