@@ -7,31 +7,35 @@
 
 typedef void( * callablefn)(void);
 
-struct cmdcommandarguement {
-  const char * symb;
-  int value; // just base it off if value
-};
-
 struct cmdcommand {
   const char * in;
-  struct cmdcommandarguement arguements[16];
+  char arguements[4];
   void * fn;
 };
 
 void list_cmdcommands();
-
-struct cmdcommand cmdcommands[2] = {
+void cmd_test(const char* in);
+struct cmdcommand cmdcommands[3] = {
   {
     "clear",
-    {},
+    { 0, 0, 0, 0 },
     (void * ) & terminal_clear
   },
   {
     "help",
-    {},
+    { 0, 0, 0, 0 },
     (void * ) & list_cmdcommands
+  },
+  {
+    "test",
+    { 'H', 0, 0, 0 },
+    (void * ) &cmd_test
   }
 };
+
+void cmd_test(const char* in){
+  terminal_write_string(in);
+}
 
 void list_cmdcommands() {
   terminal_write_string("\n-- LIST OF COMMANDS --\n");
@@ -41,6 +45,18 @@ void list_cmdcommands() {
     terminal_write_string("\n");
   }
   terminal_write_string("-- END OF COMMANDS--\n\n");
+}
+
+char get_cmd_command_params(int index, const char* in)
+{
+  for (int i = index; i < strlen(in)-1; i++)
+    {
+      if (in[i] == '-')
+        if(in[i+1] == isletter(in[i+1])){
+          return in[i+1];
+        }
+    }
+  return 0;
 }
 
 bool cmd_command_equals(const char * str1,

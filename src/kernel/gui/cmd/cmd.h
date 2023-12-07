@@ -33,13 +33,52 @@ bool cmd_run_command() {
   }
 
   void* fn = (void*)0;
+  
+  // get obj.
+  static char keyword[CMD_BUFFER_SIZE];
+  for(int i = 0; i < CMD_BUFFER_SIZE; i++) keyword[i] = '\0';
 
-  // get func
-  {
-    struct cmdcommand* c = get_cmd_command(cmd_input_buffer.buffer);
-    if (c != (struct cmdcommand*)0) fn = c->fn;
+  static char restOf[CMD_BUFFER_SIZE];
+  for(int i = 0; i < CMD_BUFFER_SIZE; i++) restOf[i] = '\0';
+  
+  for(int i = 0; i < CMD_BUFFER_SIZE; i++){
+    if(cmd_input_buffer.buffer[i] == ' ')
+      break;
+    keyword[i] = cmd_input_buffer.buffer[i];
   }
 
+  // Get params?
+  {
+    bool found = false;
+    int indx = 0;
+    for(int i = 0; i < CMD_BUFFER_SIZE; i++){
+      if(cmd_input_buffer.buffer[i] == ' '){
+        found = true;
+      }
+      if(found == true)
+        restOf[indx++] = cmd_input_buffer.buffer[i];
+    }
+  }
+  
+  struct cmdcommand* c = get_cmd_command(keyword);
+  int num_params = 0;
+  if(c != (struct cmdcommand*)0)
+  for(;num_params < 4; num_params++)
+    if(c->arguements[num_params] == 0)
+      break;
+  
+  // get func
+  {
+    if (c != (struct cmdcommand*)0) fn = c->fn;
+  }
+  
+  // check params
+  {
+    if (num_params > 0)
+    {
+      
+    }
+  }
   // call
   {
     if (fn == (void*)0) {
@@ -47,7 +86,11 @@ bool cmd_run_command() {
       terminal.row++;
       terminal.column = 0;
     } else {
-      ((callablefn)fn)();
+      if(num_params > 0){
+        //call_asm(fn, &restOf);
+      }
+      else
+        ((callablefn)fn)();
       // call
     }
   }
@@ -152,7 +195,6 @@ void cmd_input() {
   } else
     cmd_run_command();
 }
-
 void cmd_install_keyboard() {
   add_to_keyboard_input_handles(&cmd_input);
   cmd_print_dir();

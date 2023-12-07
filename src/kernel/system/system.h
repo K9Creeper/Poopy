@@ -80,3 +80,14 @@ bool islower(const char c) {
 bool isdigit(const char c) {
   return (c >= '0' && c <= '9');
 }
+
+void call_asm(void* fn, void* arg)
+{
+  // pwease work
+    asm volatile(
+    "movl  %[FUNC], %%eax\n"
+    "movl %[ARG], %%edi\n"
+    "call *%%eax"
+    : : [FUNC]"a"((int)fn), [ARG]"b"((int)arg)
+      );
+}
